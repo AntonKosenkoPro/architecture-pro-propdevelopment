@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Диаграмма контекста: Внедрение сервисов "Умный дом" (PropDevelopment)
+
+Person(tenant, "Собственник / Жилец", "Использует мобильное приложение для управления ЖКУ и Умным домом, звонит в домофон, проезжает через шлагбаум.")
+
+System_Boundary(prop_boundary, "PropDevelopment") {
+    System(prop_system, "ИТ-система PropDevelopment", "Обеспечивает клиентские сервисы, ЖКУ, биллинг и управление доступом к функциям умного дома.")
+}
+
+System_Ext(partner_smarthome, "Платформа партнера «Умный дом»", "Внешняя SaaS-платформа. Управляет оборудованием (домофоны, шлагбаумы), обрабатывает биометрию и видеопотоки.")
+System_Ext(management_company, "Системы УК", "Партнерские системы управляющих компаний (существующие).")
+
+Rel(tenant, prop_system, "Управляет доступами, загружает фото/номера машин, открывает двери", "HTTP")
+Rel(tenant, partner_smarthome, "Физическое взаимодействие (лицо для домофона, номер авто для шлагбаума)")
+Rel(prop_system, partner_smarthome, "Синхронизирует списки доступа (СКУД), передает команды открытия, получает видеовызовы", "API (HTTPS, WebRTC)")
+Rel(prop_system, management_company, "Обмен данными по ЖКУ")
+
+@enduml
